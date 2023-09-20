@@ -1,0 +1,37 @@
+<HTML>
+<HEAD> <TITLE> Tipos Variables </TITLE> </HEAD>
+
+<BODY>
+<?php
+$ip="192.18.16.204.";
+$longitud=strlen($ip);echo "la longitud de ip es ".($longitud-1)."<br/>";
+$string1 =null;
+
+
+for($i=0; $i<$longitud; $i++){   
+	if(is_numeric($ip[$i]) ){		
+	$character=((string)$ip[$i]);   
+	$string1 .=$character;			
+	}else{
+		
+		$binario=decbin($string1);
+		$string1 ="";
+		$longitudDeBinario=strlen($binario);
+		while($longitudDeBinario<8){
+			echo "0";
+			$longitudDeBinario++;
+		}
+		
+		if($i<($longitud-1)){
+			echo $binario.".";
+		}else{
+			echo $binario;
+		}
+		
+
+	}
+}
+
+?>
+<BODY>
+<HTML>
