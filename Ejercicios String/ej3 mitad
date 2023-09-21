@@ -1,0 +1,81 @@
+<HTML>
+<HEAD> <TITLE> Tipos Variables </TITLE> </HEAD>
+
+<BODY>
+<?php
+$ip="192.168.16.100/16";
+$longitud=strlen($ip);echo "la longitud de ip es ".($longitud-1)."<br/>";
+
+$string1 ="";
+$simbolo='/';
+$punto='.';
+$contador=1;
+$mascara="";
+$variable1="";
+$variable2="";
+$variable3="";
+
+for($i=0; $i<$longitud; $i++){   
+
+	if(is_numeric($ip[$i]) ){		
+	$character=((string)$ip[$i]);   
+	$string1 .=$character;	
+	
+	}else{
+		$character="";   
+		if((strcmp(($ip[$i]),$punto )== 0)&& $contador==1){
+			while(is_numeric($ip[$i+1])){
+				$character=((string)$ip[$i+1]);   
+				$variable1 .=$character;
+				$i++;
+	
+			}
+			$contador++;
+			//echo "variable1 $variable1";
+
+		}elseif((strcmp(($ip[$i]),$punto )== 0)&& $contador==2)	{
+			while(is_numeric($ip[$i+1])){
+				$character=((string)$ip[$i+1]);   
+				$variable2 .=$character;
+				$i++;
+			}
+			$contador++;
+			//echo "variable2 $variable2";
+		
+		}elseif((strcmp(($ip[$i]),$punto )== 0)&& $contador==3)	{
+			while(is_numeric($ip[$i+1])){
+				$character=((string)$ip[$i+1]);   
+				$variable3 .=$character;
+				$i++;
+			}
+			$contador++;
+			//echo "variable3 $variable3";
+		
+		
+			
+		}else{ //comparar con /
+			while($i<$longitud){
+			
+				$mascara .=((string)$ip[$i+1]);   
+				$i++;
+			}
+			//echo "IP $ip"."</br>";
+			echo "Máscara $mascara <br/>";
+		
+		}
+	}
+	
+}
+
+echo "IP $ip"."</br>";
+
+	if($mascara<=8){
+		echo "Direccion Red: "."$string1".".0".".0".".0";
+	}elseif ($mascara<=16) {
+		echo "Direccion Red: "."$string1"."."."$variable1".".0".".0";
+	}elseif ($mascara<=24) {
+		echo "Direccion Red: ". "$string1".".$variable1".".$variable2".".0";
+	}
+?>
+</BODY>
+</HTML>
