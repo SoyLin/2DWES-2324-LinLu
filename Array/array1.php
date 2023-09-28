@@ -42,6 +42,14 @@ for($i = 1; $i<=21; $i++){
   echo "<br>";
 }
 
+echo"<table border='1'>";
+
+for($i = 0; $i<=20; $i++){
+  echo "<td>". $Suma[$i] . "</td>";
+  echo "<br>";
+}
+
+
 
 
 
