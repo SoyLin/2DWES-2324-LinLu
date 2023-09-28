@@ -1,0 +1,11 @@
+<HTML>
+<BODY>
+<?php
+include("array1.php");
+
+$Exterior = array("Indice" => $Indice = array(),"Valor" => $Valor = array(),"Suma" => $Suma = array());
+
+
+?>
+</BODY>
+</HTML>
