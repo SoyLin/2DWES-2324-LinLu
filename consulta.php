@@ -31,7 +31,7 @@ try {
     // set the PDO error mode to exception
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    //Consulta SELECT
+    //Consulta SELECT multitabla
     $stmt = $conn->prepare("SELECT nombre_emple, salario,fecha_nac,fecha_ini FROM empleado,emple_dpto
                             WHERE empleado.dni = emple_dpto.dni
                             AND cod_dpto = :cod_dpto");
@@ -39,14 +39,16 @@ try {
 
     $stmt->bindParam(':cod_dpto', $cod_dpto);
 
+    
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $cod_dpto = $_POST["cod_dpto"];
+    $cod_dpto = $_POST["cod_dpto"]; //Almacenar dato recogido
 
     $stmt->execute();
 
     $stmt->setFetchMode(PDO::FETCH_ASSOC);
     $resultado=$stmt->fetchAll();
-   
+
+    //imprimir tabla
     echo "<table>";
     echo "<tr> <td>Nombre</td> <td>Salario</td> <td>Fecha_nacimiento</td> <td>Fecha_inicio</td> </tr>";
 
