@@ -55,7 +55,7 @@ try {
     foreach($resultado as $row) {
         echo "<tr>";
         echo "<td>" . $row["nombre_emple"] . "</td>";
-        echo "<td>" . $row["salario"] . "</td>";
+        echo "<td>" . $row["salario"] . "€". "</td>";
         echo "<td>" . $row["fecha_nac"] . "</td>";
         echo "<td>" . $row["fecha_ini"] . "</td>";
         echo "</tr>";
