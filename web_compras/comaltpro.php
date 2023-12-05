@@ -35,7 +35,7 @@
         
          echo "<label for='cat'>Selecciona categoria:</label>";
      
-         echo "<select name='cat' id='cat' multiple>";
+         echo "<select name='cat' id='cat'>";
          foreach($list_cat as $row) { 
      
              echo "<option value= " . $row["ID_CATEGORIA"]. ">" . $row["ID_CATEGORIA"] . "</option>";
