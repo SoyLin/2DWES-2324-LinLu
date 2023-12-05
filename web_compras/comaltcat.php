@@ -20,6 +20,9 @@
     $username = "root";
     $password = "rootroot";
     $dbname = "comprasweb";
+
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") { //primero enviar, depués ejecutar
     
 try {
     $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
@@ -32,18 +35,16 @@ try {
     $max_id = $sql_id['max_id']; //sacar el valor de la posición "max_id"
    
 
-//    echo "<pre>";
-//    print_r($sql_id);
+    echo "<pre>";
+    print_r($sql_id);
 
-//    echo "</pre>";
+   echo "</pre>";
 
-
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $NOMBRE = $_POST["NOMBRE"];
     
         $ID_CATEGORIA =  incremento($max_id);
-        //echo $ID_CATEGORIA;
+        echo $ID_CATEGORIA;
       
        $stmt = $conn->prepare("INSERT INTO categoria (ID_CATEGORIA,NOMBRE) VALUES (:ID_CATEGORIA,:NOMBRE)");
        $stmt->bindParam(':ID_CATEGORIA',$ID_CATEGORIA);
@@ -54,27 +55,22 @@ try {
 
     echo "New records created successfully";
     }
-    }
+    
 catch(PDOException $e)
     {
     echo "Error: " . $e->getMessage();
     }
 $conn = null; 
+}
 
 function incremento($numero){
     $numero = substr($numero,1);
-    $numero++;
-
     if ($numero==0) {
-        $numero = "C000";
-    }elseif ($numero<=9) {
-        $numero = "C00" . $numero;
-    }elseif ($numero<=99) {
-        $numero = "C0" . $numero;
-    }else {
-        $numero = "C" . $numero;
+        $numero=0;
     }
-    return $numero;
+    $numero++;
+    $numero = str_pad($numero,3,"0",STR_PAD_LEFT);
+    return "C" . $numero;
 }
     
 ?>
