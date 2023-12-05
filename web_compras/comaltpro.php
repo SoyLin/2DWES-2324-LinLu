@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+  
 </head>
 <body>
 <form  action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']);?>" method="post">
@@ -27,7 +28,7 @@
          $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
      
      
-         $stmt2 = $conn->prepare("SELECT ID_CATEGORIA FROM categoria");
+         $stmt2 = $conn->prepare("SELECT ID_CATEGORIA,NOMBRE FROM categoria");
          $stmt2->execute(); //excute
          $stmt2->setFetchMode(PDO::FETCH_ASSOC);
          $list_cat = $stmt2->fetchAll();
@@ -38,10 +39,12 @@
          echo "<select name='cat' id='cat'>";
          foreach($list_cat as $row) { 
      
-             echo "<option value= " . $row["ID_CATEGORIA"]. ">" . $row["ID_CATEGORIA"] . "</option>";
+             echo "<option value= " . $row["ID_CATEGORIA"]. ">" . $row["NOMBRE"] . "</option>";
      
          }
          echo "</select>" . "<br>"; 
+
+        
      
      
         
