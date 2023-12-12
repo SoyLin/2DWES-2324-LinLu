@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+ 
 </head>
 <body>
 <form  action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']);?>" method="post">
@@ -16,6 +17,10 @@
 </body>
 </html>
 <?php
+//he descubierto que hay que incluir el fichero antes de utilizar la funcion del dentro
+// si lo incluimos al final -> cuando llamamos a la funcion -> undefined function 
+    require_once 'funciones.php';
+
     $servername = "localhost";
     $username = "root";
     $password = "rootroot";
@@ -33,7 +38,8 @@ try {
     $stmt2->execute(); //excute
     $sql_id = $stmt2 -> fetch(PDO::FETCH_ASSOC); //devuelve un array
     $max_id = $sql_id['max_id']; //sacar el valor de la posición "max_id"
-   
+    $stmt->setFetchMode(PDO::FETCH_ASSOC);
+    $resultado=$stmt->fetchAll();
 
     echo "<pre>";
     print_r($sql_id);
@@ -42,9 +48,9 @@ try {
 
 
         $NOMBRE = $_POST["NOMBRE"];
-    
-        $ID_CATEGORIA =  incremento($max_id);
-        echo $ID_CATEGORIA;
+        $letra = "C";
+        $ID_CATEGORIA =  incremento($max_id,$letra);
+       // echo $ID_CATEGORIA;
       
        $stmt = $conn->prepare("INSERT INTO categoria (ID_CATEGORIA,NOMBRE) VALUES (:ID_CATEGORIA,:NOMBRE)");
        $stmt->bindParam(':ID_CATEGORIA',$ID_CATEGORIA);
@@ -63,14 +69,6 @@ catch(PDOException $e)
 $conn = null; 
 }
 
-function incremento($numero){
-    $numero = substr($numero,1);
-    if ($numero==0) {
-        $numero=0;
-    }
-    $numero++;
-    $numero = str_pad($numero,3,"0",STR_PAD_LEFT);
-    return "C" . $numero;
-}
+
     
 ?>
