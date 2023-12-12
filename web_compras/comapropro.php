@@ -8,7 +8,7 @@
 </head>
 <body>
 <form  action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']);?>" method="post">
-<h2>Alta de productos</h2>
+<h2>Alta de cantidad (Tabla almacena)</h2>
  
         <?php
          $servername = "localhost";
@@ -73,15 +73,42 @@
     $ID_PRODUCTO = $_POST["PRO"];
     $NUM_ALMACEN = $_POST["ALMACEN"];
     $CANTIDAD = $_POST["CANTIDAD"];
-  
-      
-    $stmt2 = $conn->prepare("INSERT INTO almacena (ID_PRODUCTO,NUM_ALMACEN,CANTIDAD) VALUES (:ID_PRODUCTO,:NUM_ALMACEN,:CANTIDAD)");
-    $stmt2->bindParam(':ID_PRODUCTO',$ID_PRODUCTO);
+
+    $stmt2 = $conn->prepare("SELECT CANTIDAD FROM almacena 
+                            WHERE ID_PRODUCTO= :ID_PRODUCTO
+                            AND NUM_ALMACEN= :NUM_ALMACEN");
+    
+    $stmt2->bindParam(':ID_PRODUCTO',$ID_PRODUCTO); //seguridad
     $stmt2->bindParam(':NUM_ALMACEN', $NUM_ALMACEN);
-    $stmt2->bindParam(':CANTIDAD',$CANTIDAD);
+
+    $stmt2->execute(); //excute
+    $resultado = $stmt2 -> fetch(PDO::FETCH_ASSOC); //devuelve un array
+    $historia_cant = $resultado['CANTIDAD']; //sacar el valor de la posición "CANTIDAD"
+   
+    //echo "cantidad que tenía " . $historia_cant . "<br>";
+
+    if ($historia_cant==0) {
+        $stmt3 = $conn->prepare("INSERT INTO almacena (ID_PRODUCTO,NUM_ALMACEN,CANTIDAD) VALUES (:ID_PRODUCTO,:NUM_ALMACEN,:CANTIDAD)");
+        $stmt3->bindParam(':ID_PRODUCTO',$ID_PRODUCTO);
+        $stmt3->bindParam(':NUM_ALMACEN', $NUM_ALMACEN);
+        $stmt3->bindParam(':CANTIDAD',$CANTIDAD);
+        $stmt3->execute();
+    
+    }else{
+        $CANTIDAD += $historia_cant;
+        $stmt4 = $conn->prepare("UPDATE almacena SET CANTIDAD = :CANTIDAD
+                                WHERE ID_PRODUCTO = :ID_PRODUCTO
+                                AND NUM_ALMACEN = :NUM_ALMACEN");
+        $stmt4->bindParam(':ID_PRODUCTO',$ID_PRODUCTO);
+        $stmt4->bindParam(':NUM_ALMACEN', $NUM_ALMACEN);
+        $stmt4->bindParam(':CANTIDAD',$CANTIDAD);
+        $stmt4->execute();
+
+    }
 
 
-    $stmt2->execute();
+
+   
 
 
     echo "New records created successfully";
