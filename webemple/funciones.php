@@ -5,7 +5,7 @@ function conexion($dbname){
     return $conn;
 }
 
-function impri_tabla($conn){
+function lista_empleado($conn){
     $stmt = $conn->prepare("SELECT dni, CONCAT (nombre,' ',apellidos) AS NomApe,salario FROM empleado");
     $stmt->execute(); 
     $stmt->setFetchMode(PDO::FETCH_ASSOC);
