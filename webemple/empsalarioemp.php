@@ -22,7 +22,7 @@
          $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
      
      
-         $list_emp = impri_tabla($conn);
+         $list_emp = lista_empleado($conn);
       
         
          echo "<label for='emple'>Selecciona un empleado:</label>";
