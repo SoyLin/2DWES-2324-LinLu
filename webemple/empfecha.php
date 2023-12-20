@@ -7,40 +7,23 @@
   
 </head>
 <body>
+<a href="./eminicio.html">Volver a la Página de Inicio</a>
+
 <form  action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']);?>" method="post">
-<h2>Fecha</h2>
+<h2>Búsqueda por fecha</h2>  
+<p>Introducir una fecha y se va a mostrar los empleados junto con su departamento que trabajan <u>durante ese tiempo</u>
+</p>   
+    <?php
+        require_once('./funciones.php');     
      
-        <?php
-         $servername = "localhost";
-         $username = "root";
-         $password = "rootroot";
-         $dbname = "webemple";
-     
-         
      try {
-         $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $conn = conexion();
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
      
-     
-         $stmt = $conn->prepare("SELECT dni, CONCAT (nombre,' ',apellidos) AS NomApe,salario FROM empleado");
-         $stmt->execute(); //excute
-         $stmt->setFetchMode(PDO::FETCH_ASSOC);
-         $list_emp = $stmt->fetchAll();
-      
         
-         echo "<label for='emple'>Selecciona un empleado:</label>";
-     
-         echo "<select name='emple_seleccionado' id='emple'>";
-         foreach($list_emp as $row) { 
-     
-             echo "<option value= " . $row["dni"]. ">" . $row["NomApe"] . ' :' . $row["salario"] . "</option>";
-            //selecciona codigo pero muestra el nombre
-         }
-         echo "</select>" . "<br>"; 
-        
-        ?>
-        <label>Introduce el porcentaje de la modificación
-            <input type="text" name="porcentaje">
+    ?>
+        <label>Introduce una fecha: 
+            <input type="text" name="fecha">
         </label><br>
 
         <input type="submit">
@@ -50,37 +33,39 @@
 <?php
    if ($_SERVER["REQUEST_METHOD"] == "POST") { //primero enviar, depués ejecutar
 
-    require_once('./funciones.php');
-    //almacena el codigo de departamento en tabla trabaja (relación N:N)
-    $emple_seleccionado = $_POST["emple_seleccionado"];
-    $porcentaje = $_POST["porcentaje"];
-
-    $porcentaje = porcentaje($porcentaje);
-    echo "fraccion decimal: " . $porcentaje . "<br>";
+    $fecha = $_POST["fecha"];
+    $longitud= strlen($fecha);
+    $longitud++;
+    $fecha = str_pad($fecha,$longitud,"%");
+    echo $fecha;
 
 
-    $stmt2 = $conn->prepare("SELECT salario FROM empleado WHERE dni = :dni");
-    $stmt2->bindParam(':dni',$emple_seleccionado); //seguridad, evitar inyección
+
+
+    $stmt2 = $conn->prepare("SELECT emple_depart.dni, CONCAT (nombre,' ',apellidos) AS NomApe,departamento.nombre_dpto,emple_depart.fecha_ini,emple_depart.fecha_fin from emple_depart,empleado,departamento 
+                            WHERE emple_depart.cod_dpto = departamento.cod_dpto
+                            AND emple_depart.dni = empleado.dni 
+                            AND ( ( fecha_ini <= :fecha && fecha_fin >= :fecha) || (fecha_ini <= :fecha && fecha_fin is null))");
+    $stmt2->bindParam(':fecha',$fecha); //seguridad, evitar inyección
     $stmt2->execute();
-    $resultado = $stmt2->fetch(PDO::FETCH_ASSOC);
-    $salario = $resultado["salario"];
+    $resultado = $stmt2->fetchAll(PDO::FETCH_ASSOC);
 
-    // echo "<pre>";
-    // print_r($resultado);
-    // echo "</pre>";
-   
-
-    $salario += ($salario*$porcentaje);   
-    echo "salario modificado: " . $salario . "<br>";
-
-    
-    $stmt3 = $conn->prepare("UPDATE empleado SET salario = :salario WHERE dni = :dni "); 
-    $stmt3->bindParam(':dni',$emple_seleccionado); //seguridad, evitar inyección
-    $stmt3->bindParam(':salario',$salario); //seguridad, evitar inyección
-    $stmt3->execute();
-
- 
     echo "New records created successfully" . "<br>";
+
+    echo "<br><table>";
+    echo "<tr> <td>DNI</td> <td>Nombre y Apellidos</td> <td>Departamento</td> <td>Fecha inicio</td> <td>Fecha fin</td></tr>";
+
+    foreach($resultado as $row) {
+        echo "<tr>";
+        echo "<td>" . $row["dni"] . "</td>";     
+        echo "<td>" . $row["NomApe"] . "</td>";   
+        echo "<td>" . $row["nombre_dpto"] . "</td>";  
+        echo "<td>" . $row["fecha_ini"] . "</td>";  
+        echo "<td>" . $row["fecha_fin"] . "</td>";  
+        echo "</tr>";
+    }
+    echo "</table>";
+
 
     }
     }
@@ -93,7 +78,3 @@ $conn = null;
 
     
 ?>
-SELECT emple_depart.cod_dpto, emple_depart.dni,empleado.nombre,departamento.nombre_dpto,emple_depart.fecha_ini,emple_depart.fecha_fin from emple_depart,empleado,departamento 
-WHERE departamento.cod_dpto=emple_depart.cod_dpto 
-AND emple_depart.dni = empleado.dni 
-AND ( ( fecha_ini <= "2015%" && fecha_fin >= "2015%") || (fecha_ini <= "2015%" && fecha_fin is null))

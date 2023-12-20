@@ -7,37 +7,23 @@
   
 </head>
 <body>
+<a href="./eminicio.html">Volver a la Página de Inicio</a>
+
 <form  action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']);?>" method="post">
 <h2>Historial de los empleados del departamento</h2>
      
         <?php
-         $servername = "localhost";
-         $username = "root";
-         $password = "rootroot";
-         $dbname = "webemple";
+        require_once('./funciones.php');
+
      
          
      try {
-         $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $conn = conexion();
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
      
      
-         $stmt = $conn->prepare("SELECT cod_dpto,nombre_dpto FROM departamento");
-         $stmt->execute(); //excute
-         $stmt->setFetchMode(PDO::FETCH_ASSOC);
-         $list_cat = $stmt->fetchAll();
-      
-        
-         echo "<label for='dpto'>Selecciona departamento:</label>";
-     
-         echo "<select name='dpto_seleccionado' id='dpto'>";
-         foreach($list_cat as $row) { 
-     
-             echo "<option value= " . $row["cod_dpto"]. ">" . $row["nombre_dpto"] . "</option>";
-            //selecciona codigo pero muestra el nombre
-         }
-         echo "</select>" . "<br>"; 
-
+         $mensaje = "Selecciona departamento: ";
+         tabla_dpto($conn,$mensaje);
         
         
         ?>
@@ -63,18 +49,9 @@
  
     echo "New records created successfully" . "<br>";
 
-
-    echo "<br><table>";
-    echo "<tr> <td>DNI</td> <td>Nombre</td><td>fecha de finalización</td></tr>";
-
-    foreach($resultado as $row) {
-        echo "<tr>";
-        echo "<td>" . $row["dni"] . "</td>";     //imprimir valor correspondiente del índice "dni"
-        echo "<td>" . $row["NomApe"] . "</td>";   //imprimir valor correspondiente del índice "NomApe"
-        echo "<td>" . $row["fecha_fin"] . "</td>";  //imprimir valor correspondiente del índice "fecha_fin"
-        echo "</tr>";
-    }
-    echo "</table>";
+    $fecha = "fecha_fin";
+    bucle_mostrar_table($resultado,$fecha);
+ 
 
     }
     }

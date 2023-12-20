@@ -7,33 +7,24 @@
   
 </head>
 <body>
+<a href="./eminicio.html">Volver a la Página de Inicio</a>
+
 <form  action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']);?>" method="post">
 <h2>Modificación de salario</h2>
      
         <?php
         
-        require_once('./funciones.php');
-        $dbname = "webemple";
-     
+        require_once('./funciones.php');     
          
      try {
         
-         $conn = conexion($dbname);
+        //Establecer la conexion
+         $conn = conexion();
          $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-     
-     
-         $list_emp = lista_empleado($conn);
-      
         
-         echo "<label for='emple'>Selecciona un empleado:</label>";
-     
-         echo "<select name='emple_seleccionado' id='emple'>";
-         foreach($list_emp as $row) { 
-     
-             echo "<option value= " . $row["dni"]. ">" . $row["NomApe"] . ' :' . $row["salario"] . "</option>";
-            //selecciona codigo pero muestra el nombre
-         }
-         echo "</select>" . "<br>"; 
+         //imprimir lista de empleados 
+         tabla_emple($conn);
+       
         
         ?>
         <label>Introduce el porcentaje de la modificación
@@ -51,6 +42,7 @@
     $emple_seleccionado = $_POST["emple_seleccionado"];
     $porcentaje = $_POST["porcentaje"];
 
+    //funcion que convierte % a fraccion decimal
     $porcentaje = porcentaje($porcentaje);
     echo "fraccion decimal: " . $porcentaje . "<br>";
 
@@ -61,11 +53,8 @@
     $resultado = $stmt2->fetch(PDO::FETCH_ASSOC);
     $salario = $resultado["salario"];
 
-    // echo "<pre>";
-    // print_r($resultado);
-    // echo "</pre>";
-   
 
+    //calcular salario
     $salario += ($salario*$porcentaje);   
     echo "salario modificado: " . $salario . "<br>";
 
