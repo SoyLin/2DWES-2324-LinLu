@@ -50,4 +50,3 @@ function porcentaje ($porcen){
 ?>
 
 
-<!-- https://github.com/Franyxy/2DWES-AndresGarcia/blob/main/Ejercicios1/basedatos/webemple/funciones.php -->
