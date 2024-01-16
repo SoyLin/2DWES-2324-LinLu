@@ -1,4 +1,13 @@
 <!DOCTYPE html>
+<?php
+session_start(); 
+
+if(!isset($_SESSION["usuario"])) {
+    echo "Cookie " . $cookie_name . " no definida!!!<br>";
+} else {
+    
+?>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -29,3 +38,8 @@
         </div>
 </body>
 </html>
+<?php
+
+    echo "BIENVENIDO: ";
+}
+?>
