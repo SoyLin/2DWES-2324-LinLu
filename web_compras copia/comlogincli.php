@@ -53,9 +53,15 @@ if ($_SERVER["REQUEST_METHOD"]=="POST") {
 
         if ($count_fila>0) {
             echo "correcto";
+            session_start();
+            $_SESSION["usuario"]= $usuario;
+
             header("Location: portalcli.php");
+            exit();
+
         }else{
             echo "Usuario o contraseña mal escrito";
+            header("Location: comlogincli.php");
         }
 
 
