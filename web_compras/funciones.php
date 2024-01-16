@@ -1,9 +1,9 @@
 <?php
 //PDO
 function conexion(){
-    $servername = "localhost:8889";
+    $servername = "localhost";
     $username = "root";
-    $password = "root";
+    $password = "rootroot";
     $dbname = "comprasweb";//nombre de bases de datos, escribir el nombre correcto para conectar con el BBDD correspondiente
 
     $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
@@ -51,12 +51,18 @@ function incremento($numero,$letra){
     return $letra . $numero;
 }
 
-//LIMPIEZA DE DATOS + MAYÚSCULA
+//LIMPIEZA DE DATOS
 function limpieza($data) {
+    $data = str_replace("  ","",$data); //he utilizado str_replace en lugar de trim para eliminar todos los espacios
+    $data = stripslashes($data);
+    $data = htmlspecialchars($data);
+    return $data;
+}
+
+function limpieza_trim($data){
     $data = trim($data);
     $data = stripslashes($data);
     $data = htmlspecialchars($data);
-    $data = strtoupper($data);
     return $data;
 }
 

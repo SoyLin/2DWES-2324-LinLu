@@ -1,8 +1,38 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<form  action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']);?>" method="post">
+<h2>Registro de cliente</h2>
+        <label>Introduce el NIF    
+        <input type="text" name="NIF"> </label><br>
+
+        <input type="submit">
+</form>
+</body>
+</html> -->
 <?php
 
-$numero = C000;
-$numero = substr($numero,1);
-$numero++;
+require_once 'funciones.php';
+
+
+
+
+$string = "C      ristina";
+$string=str_replace("  ","",$string);
+
+echo $string . "<br>";
+echo strrev($string);
+
+
+
+// $numero = C000;
+// $numero = substr($numero,1);
+// $numero++;
 //$cantidad = strlen($numero);
 //echo $cantidad . "<br>";
 
@@ -11,7 +41,7 @@ $numero++;
   //  $cantidad++;
 //}
 //echo $letra . $numero;
-STR_PAD_LEFT
+// STR_PAD_LEFT
 
 
 
